@@ -8,10 +8,6 @@ __pycache__
 myvenv/
 venv/
 
-# svgs
-.svg
-icons
-
 # Database
 db.sqlite3
 
