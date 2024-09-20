@@ -12,15 +12,18 @@
 
 <body>
     <header class="page-header">
-      <div class="container">
-          <h1><a href="/">Frog's Blogs</a></h1>
-      </div>
+        <div class="container">
+            <a href="{% url 'post_new' %}" class="top-menu">
+                {% include './icons/file-earmark-plus.svg' %}
+            </a>
+            <h1><a href="/">Frog's Blogs</a></h1>
+        </div>
     </header>
     <main class="container">
         <div class="row">
             <div class="col">
-            {% block content %}
-            {% endblock %}
+                {% block content %}
+                {% endblock %}
             </div>
         </div>
     </main>
