@@ -1,18 +1,56 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}
-    <article class="post">
-        <aside class="actions">
-            <a class="btn btn-secondary" href="{% url 'post_edit' pk=post.pk %}">
-              {% include './icons/pencil-fill.svg' %}
-            </a>
-        </aside>
-        {% if post.published_date %}
-            <time class="date">
-                {{ post.published_date }}
-            </time>
-        {% endif %}
-        <h2>{{ post.title }}</h2>
-        <p>{{ post.text|linebreaksbr }}</p>
-    </article>
+<div class="stay-on-top">
+<h6 class="date">
+    Autor
+</h6>
+<h1>
+    {{ post.title }}
+</h1>
+<div class="align-horizontal">
+    
+    <h6>
+        Erstellt am {{ post.published_date|date:"d. F Y, H:i" }}{% if post.edit_date %}, zuletzt bearbeitet am {{ post.edit_date|date:"d.m.y" }} um {{ post.edit_date|date:"H:i" }}{% endif %}
+    </h6>
+    
+
+    {% if user.is_authenticated %}
+    <aside class="align-horizontal">
+    {% if post.draft == True %}
+    <form method="POST" action="{% url 'post_publish' pk=post.pk %}" class="post-form">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-secondary publish-button" name="action" value="publish">
+            Publish
+        </button>
+        <a class="btn btn-secondary edit-button" href="{% url 'post_edit' pk=post.pk %}">
+            {% include './icons/pencil-fill.svg' %}
+        </a>
+    </form>
+    <form method="POST" action="{% url 'post_remove' pk=post.pk %}" class="post-form">{% csrf_token %}
+        <button type="submit" class="btn btn-danger" name="delete">
+            {% include './icons/trash-fill.svg' %}
+        </button>
+    </form>
+    {% else %}
+    <a class="btn btn-secondary edit-button" href="{% url 'post_edit' pk=post.pk %}">
+        {% include './icons/pencil-fill.svg' %}
+    </a>
+    <form method="POST" action="{% url 'post_remove' pk=post.pk %}" class="post-form">{% csrf_token %}
+        <button type="submit" class="btn btn-danger" name="delete">
+            {% include './icons/trash-fill.svg' %}
+        </button>
+    </form>
+    {% endif %}
+    </aside>
+    {% endif %}
+    </div>
+<hr>
+</div>
+<article class="post">
+    <p>
+        {{ post.text|linebreaksbr }}
+    </p>
+</article>
+
 {% endblock %}

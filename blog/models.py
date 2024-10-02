@@ -6,13 +6,16 @@ from django.utils import timezone
 class Post(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
-    subtitle = models.CharField(max_length=200, default="")
     text = models.TextField()
     created_date = models.DateTimeField(default=timezone.now)
-    published_date = models.DateTimeField(blank=True, null=True)
+    # using charfields instead of datetime because of formatting issues
+    edit_date = models.DateTimeField(null=True, blank=True)
+    published_date = models.DateTimeField(default=timezone.now)
+    draft = models.BooleanField(default=False)
 
     def publish(self):
         self.published_date = timezone.now()
+        Post.draft = False 
         self.save()
 
     def __str__(self):
